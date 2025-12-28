@@ -4043,7 +4043,7 @@ storeAtts(XML_Parser parser, const ENCODING *enc, const char *attStr,
      and clear flags that say whether attributes were specified */
   i = 0;
   if (nPrefixes) {
-    unsigned int j; /* hash table index */
+    unsigned long j; /* hash table index */
     unsigned long version = parser->m_nsAttsVersion;
 
     /* Detect and prevent invalid shift */
@@ -4051,7 +4051,7 @@ storeAtts(XML_Parser parser, const ENCODING *enc, const char *attStr,
       return XML_ERROR_NO_MEMORY;
     }
 
-    unsigned int nsAttsSize = 1u << parser->m_nsAttsPower;
+    unsigned long nsAttsSize = 1ul << parser->m_nsAttsPower;
     unsigned char oldNsAttsPower = parser->m_nsAttsPower;
     /* size of hash table must be at least 2 * (# of prefixed attributes) */
     if ((nPrefixes << 1)
@@ -4075,8 +4075,8 @@ storeAtts(XML_Parser parser, const ENCODING *enc, const char *attStr,
       /* Detect and prevent integer overflow.
        * The preprocessor guard addresses the "always false" warning
        * from -Wtype-limits on platforms where
-       * sizeof(unsigned int) < sizeof(size_t), e.g. on x86_64. */
-#if UINT_MAX >= SIZE_MAX
+       * sizeof(unsigned long) < sizeof(size_t), e.g. on x86_64. */
+#if ULONG_MAX >= SIZE_MAX
       if (nsAttsSize > SIZE_MAX / sizeof(NS_ATT)) {
         /* Restore actual size of memory in m_nsAtts */
         parser->m_nsAttsPower = oldNsAttsPower;
